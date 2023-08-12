@@ -1,0 +1,29 @@
+D:\lập trình windows\báo cáo lập trình windows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\bin\Debug\NguyenVoLinh-2121110083.exe.config
+D:\lập trình windows\báo cáo lập trình windows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\bin\Debug\NguyenVoLinh-2121110083.exe
+D:\lập trình windows\báo cáo lập trình windows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\bin\Debug\NguyenVoLinh-2121110083.pdb
+D:\lập trình windows\báo cáo lập trình windows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh-2121110083.csprojResolveAssemblyReference.cache
+D:\lập trình windows\báo cáo lập trình windows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh_2121110083.Form1.resources
+D:\lập trình windows\báo cáo lập trình windows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh_2121110083.Properties.Resources.resources
+D:\lập trình windows\báo cáo lập trình windows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh-2121110083.csproj.GenerateResource.Cache
+D:\lập trình windows\báo cáo lập trình windows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh-2121110083.exe
+D:\lập trình windows\báo cáo lập trình windows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh-2121110083.pdb
+D:\lập trình windows\báo cáo lập trình windows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh_2121110083.GUI.Menu.resources
+D:\lập trình windows\báo cáo lập trình windows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh_2121110083.GUI.GiaoDien.resources
+D:\lập trình windows\báo cáo lập trình windows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh_2121110083.GUI.DanhMuc.resources
+D:\lập trình windows\báo cáo lập trình windows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh_2121110083.GUI.HoaDon.resources
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\bin\Debug\NguyenVoLinh-2121110083.exe.config
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh-2121110083.exe
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh-2121110083.pdb
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\bin\Debug\NguyenVoLinh-2121110083.exe
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\bin\Debug\NguyenVoLinh-2121110083.pdb
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh-2121110083.csprojResolveAssemblyReference.cache
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh_2121110083.Form1.resources
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh_2121110083.GUI.DanhMuc.resources
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh_2121110083.GUI.GiaoDien.resources
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh_2121110083.GUI.HoaDon.resources
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh_2121110083.GUI.Menu.resources
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh_2121110083.Properties.Resources.resources
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh-2121110083.csproj.GenerateResource.Cache
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083-baocao\NguyenVoLinh-2121110083\bin\Debug\NguyenVoLinh-2121110083.exe.config
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083-baocao\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh-2121110083.exe
+D:\laptrinhwindows\baocaolaptrinhwindows\NguyenVoLinh-2121110083-baocao\NguyenVoLinh-2121110083\obj\Debug\NguyenVoLinh-2121110083.pdb
