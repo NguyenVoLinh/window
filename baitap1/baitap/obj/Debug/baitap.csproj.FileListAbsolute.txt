@@ -25,3 +25,6 @@ D:\lập trình windows\NguyenVolinh2121110083\baitap\baitap\obj\Debug\baitap._1
 D:\lập trình windows\NguyenVolinh2121110083\baitap\baitap\bin\Debug\baitap.exe
 D:\lập trình windows\NguyenVolinh2121110083\baitap\baitap\bin\Debug\baitap.pdb
 D:\lập trình windows\NguyenVolinh2121110083\baitap\baitap\obj\Debug\baitap.pdb
+D:\lập trình windows\window\baitap1\baitap\bin\Debug\baitap.exe.config
+D:\lập trình windows\window\baitap1\baitap\obj\Debug\baitap.exe
+D:\lập trình windows\window\baitap1\baitap\obj\Debug\baitap.pdb
