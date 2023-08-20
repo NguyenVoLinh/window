@@ -76,5 +76,18 @@ namespace NguyenVoLinh_2121110083.GUI
         {
 
         }
+
+        private void btkh_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                KhachHang trang2 = new KhachHang();
+                trang2.ShowDialog();
+            }
+            catch
+            {
+                MessageBox.Show("lỗi vui lòng chọn lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
     }
 }

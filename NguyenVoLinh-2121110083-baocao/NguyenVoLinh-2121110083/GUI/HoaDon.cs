@@ -13,6 +13,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.IO;
 
 namespace NguyenVoLinh_2121110083.GUI
 {
@@ -20,55 +23,9 @@ namespace NguyenVoLinh_2121110083.GUI
     {
         CustomerBAL spBAL = new CustomerBAL();
         HoaDonBAL cusBAL = new HoaDonBAL();
-        DBConnection dbConnection = new DBConnection();
-
-        // ràng buộc số điện thoại
-
-        private void tbsdt_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // Allow only digits and control keys (like backspace)
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true; // Prevent the character from being entered
-                MessageBox.Show("Vui lòng chỉ nhập số điện thoại.", "Lỗi nhập liệu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-
-            // Allow only 10 to 11 digits
-            if (!string.IsNullOrEmpty(tbsdt.Text) && tbsdt.Text.Length >= 11 && tbsdt.Text.Length <= 11)
-            {
-                e.Handled = true; // Prevent entering more than 11 digits
-            }
-        }
-
-
-
-        // ràng buộc ngày lập hoá đơn
-        private bool ValidateDateInput(string input)
-        {
-            DateTime date;
-            if (DateTime.TryParseExact(input, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
-            {
-                int year = date.Year;
-                int month = date.Month;
-                int day = date.Day;
-
-                if (year >= 2000 && year <= 2050 && month >= 1 && month <= 12 && day >= 1 && day <= DateTime.DaysInMonth(year, month))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private void tbNgay_Validating(object sender, CancelEventArgs e)
-        {
-            if (!ValidateDateInput(tbNgay.Text))
-            {
-                e.Cancel = true;
-                MessageBox.Show("Ngày lập hoá đơn không hợp lệ. Vui lòng nhập theo định dạng dd/MM/yyyy và trong khoảng từ 01/01/2000 đến 31/12/2050.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
+        nhanvienBAL cusBAL1 = new nhanvienBAL();
+        KhachHangBAL cusBAL2 = new KhachHangBAL();
+        DBConnection dbConnection = new DBConnection();    
         
         public HoaDon()
         {
@@ -96,16 +53,19 @@ namespace NguyenVoLinh_2121110083.GUI
 
                     HoaDonBEL cus = new HoaDonBEL();
                     cus.id = newId;
-                    cus.ngaylap = tbNgay.Text;
-                    cus.nhanvienlap = tbNv.Text;
-                    cus.tenkhachhang = tbTenkh.Text;
-                    cus.sodienthoai = int.Parse(tbsdt.Text);
-                    cus.customer = (CustomerBEL)cbSp.SelectedItem;
+                    cus.ngaylap = date.Value.ToString("dd/MM/yyyy");
+                cus.customer = (CustomerBEL)cbSp.SelectedItem;
+                cus.sodienthoai = int.Parse(tbsdt.Text);
+                cus.nv = (nhanvienBEL)cbnv.SelectedItem;
+                    cus.kh = (KhachHangBEL)cbkh.SelectedItem;
                     cus.gia = int.Parse(tbgia.Text);
                     cus.soluong = int.Parse(tbsl.Text);
+                    cus.tongtien = cus.gia * cus.soluong;
 
                     cusBAL.NewHoadon(cus);
-                    dgvhd.Rows.Add(cus.id, cus.ngaylap, cus.nhanvienlap, cus.tenkhachhang, cus.sodienthoai, cus.CustomerName, cus.gia, cus.soluong);
+
+                    dgvhd.Rows.Add(cus.id, cus.ngaylap, cus.nvid, cus.khid,  cus.sodienthoai, cus.CustomerName, cus.gia, cus.soluong, cus.tongtien);
+                    MessageBox.Show("Thêm thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
@@ -128,7 +88,7 @@ namespace NguyenVoLinh_2121110083.GUI
             // Add the records from the database to the DataGridView
             foreach (HoaDonBEL cus in lstCus)
             {
-                dgvhd.Rows.Add(cus.id, cus.ngaylap, cus.nhanvienlap, cus.tenkhachhang, cus.sodienthoai, cus.CustomerName, cus.gia,cus.soluong);
+                dgvhd.Rows.Add(cus.id, cus.ngaylap, cus.nvid, cus.khid, cus.sodienthoai, cus.CustomerName, cus.gia, cus.soluong, cus.tongtien);
             }
             List<CustomerBEL> lstsp = spBAL.ReadCustomerList();
             foreach (CustomerBEL sp in lstsp)
@@ -137,31 +97,38 @@ namespace NguyenVoLinh_2121110083.GUI
             }
             cbSp.DisplayMember = "name";
 
+            List<nhanvienBEL> lstsp1 = cusBAL1.ReadNhanvienList();
+            foreach (nhanvienBEL sp in lstsp1)
+            {
+                cbnv.Items.Add(sp);
+            }
+            cbnv.DisplayMember = "tennhanvien";
+
+            List<KhachHangBEL> lstsp2 = cusBAL2.ReadKhachhangList();
+            foreach (KhachHangBEL sp in lstsp2)
+            {
+                cbkh.Items.Add(sp);
+            }
+            cbkh.DisplayMember = "tenkhach";
+
             tbMa.KeyPress += TextBox_KeyPress;
-            tbNgay.KeyPress += TextBox_KeyPress;
-            tbNv.KeyPress += TextBox_KeyPress;
-            tbTenkh.KeyPress += TextBox_KeyPress;
+            date.KeyPress += TextBox_KeyPress;
+            
             tbsdt.KeyPress += TextBox_KeyPress;
             tbgia.KeyPress += TextBox_KeyPress;
             tbsl.KeyPress += TextBox_KeyPress;
 
             // Attach the event handler to ComboBox control
             cbSp.KeyPress += ComboBox_KeyPress;
+            cbkh.KeyPress += ComboBox_KeyPress;
+            cbnv.KeyPress += ComboBox_KeyPress;
 
             dgvhd.RowEnter += dgvhd_RowEnter;
             dgvhd.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
             //ràng buộc ngày lập hoá đơn
-            tbNgay.Validating += tbNgay_Validating;
-            //ràng buộc giá
-            tbgia.Validating += tbgia_Validating;
-
-            //ràng buộc sdt
-            tbsdt.KeyPress += tbsdt_KeyPress;
-
-            //ràng buộc tên
-            tbNv.Validating += tbNv_Validating;
-            tbTenkh.Validating += tbTenkh_Validating;
+            date.Format = DateTimePickerFormat.Custom;
+            date.CustomFormat = "dd/MM/yyyy";
             // ràng buộc số lượng
             tbsl.Validating += tbsl_Validating;
             // mã
@@ -191,6 +158,7 @@ namespace NguyenVoLinh_2121110083.GUI
 
                         // Remove the customer from the DataGridView
                         dgvhd.Rows.RemoveAt(row.Index);
+                        MessageBox.Show("Xoá thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
@@ -204,62 +172,65 @@ namespace NguyenVoLinh_2121110083.GUI
             }
         }
 
-        private void btEdit_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                DataGridViewRow row = dgvhd.CurrentRow;
-                if (row != null)
-                {
-                    // Check if the selected row contains data
-                    if (row.Cells[0].Value != null)
-                    {
-                        if (AreAllFieldsFilled())
-                        {
-                            HoaDonBEL cus = new HoaDonBEL();
-                            cus.id = int.Parse(tbMa.Text);
-                            cus.ngaylap = tbNgay.Text;
-                            cus.nhanvienlap = tbNv.Text;
-                            cus.tenkhachhang = tbTenkh.Text;
-                            cus.sodienthoai = int.Parse(tbsdt.Text);
-                            cus.customer = (CustomerBEL)cbSp.SelectedItem;
-                            cus.gia = int.Parse(tbgia.Text);
-                            cus.soluong = int.Parse(tbsl.Text);
-                            cusBAL.EditHoadon(cus);
+        //private void btEdit_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        DataGridViewRow row = dgvhd.CurrentRow;
+        //        if (row != null)
+        //        {
+        //            // Check if the selected row contains data
+        //            if (row.Cells[0].Value != null)
+        //            {
+        //                if (AreAllFieldsFilled())
+        //                {
+        //                    HoaDonBEL cus = new HoaDonBEL();
+        //                    cus.id = int.Parse(tbMa.Text);
+        //                    cus.ngaylap = tbNgay.Text;
+        //                    cus.nhanvienlap = tbNv.Text;
+        //                    cus.tenkhachhang = tbTenkh.Text;
+        //                    cus.sodienthoai = int.Parse(tbsdt.Text);
+        //                    cus.customer = (CustomerBEL)cbSp.SelectedItem;
+        //                    cus.gia = int.Parse(tbgia.Text);
+        //                    cus.soluong = int.Parse(tbsl.Text);
+        //                    cusBAL.EditHoadon(cus);
 
-                            row.Cells[0].Value = cus.id;
-                            row.Cells[1].Value = cus.ngaylap;
-                            row.Cells[2].Value = cus.nhanvienlap;
-                            row.Cells[3].Value = cus.tenkhachhang;
-                            row.Cells[4].Value = cus.sodienthoai;
-                            row.Cells[5].Value = cus.CustomerName;
-                            row.Cells[6].Value = cus.gia;
-                            row.Cells[7].Value = cus.soluong;
-                        }
-                        else
-                        {
-                            MessageBox.Show("Vui lòng nhập đầy đủ thông tin.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Vui lòng chọn ô có dữ liệu để sửa.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                }
-            }
-            catch
-            {
-                MessageBox.Show("lỗi vui lòng thực hiện lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
+        //                    row.Cells[0].Value = cus.id;
+        //                    row.Cells[1].Value = cus.ngaylap;
+        //                    row.Cells[2].Value = cus.nhanvienlap;
+        //                    row.Cells[3].Value = cus.tenkhachhang;
+        //                    row.Cells[4].Value = cus.sodienthoai;
+        //                    row.Cells[5].Value = cus.CustomerName;
+        //                    row.Cells[6].Value = cus.gia;
+        //                    row.Cells[7].Value = cus.soluong;
+        //                }
+        //                else
+        //                {
+        //                    MessageBox.Show("Vui lòng nhập đầy đủ thông tin.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                MessageBox.Show("Vui lòng chọn ô có dữ liệu để sửa.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //            }
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        MessageBox.Show("lỗi vui lòng thực hiện lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //    }
+        //}
+
+
+        //kiểm tra xem tất cả các trường dữ liệu (fields) trong giao diện người dùng có được điền đầy đủ thông tin hay không.
         private bool AreAllFieldsFilled()
         {
             return !string.IsNullOrWhiteSpace(tbMa.Text)
-                && !string.IsNullOrWhiteSpace(tbNgay.Text)
-                && !string.IsNullOrWhiteSpace(tbNv.Text)
-                && !string.IsNullOrWhiteSpace(tbTenkh.Text)
+                && !string.IsNullOrWhiteSpace(date.Text)
                 && !string.IsNullOrWhiteSpace(tbsdt.Text)
                 && cbSp.SelectedItem != null
+                && cbkh.SelectedItem != null
+                && cbnv.SelectedItem != null
 
                 && !string.IsNullOrWhiteSpace(tbgia.Text)
                 && !string.IsNullOrWhiteSpace(tbsl.Text);
@@ -267,34 +238,102 @@ namespace NguyenVoLinh_2121110083.GUI
         }
         private void dgvhd_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
+            //int idx = e.RowIndex;
+            //DataGridViewRow row = dgvhd.Rows[idx];
+            //if (row.Cells[0].Value != null)
+            //{
+            //    tbMa.Text = row.Cells[0].Value.ToString();
+            //    date.Value = DateTime.ParseExact(row.Cells[1].Value.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            //    if (row.Cells[2].Value != null)
+            //    {
+            //        cbkh.Text = row.Cells[2].Value.ToString();
+            //    }
+            //    else
+            //    {
+            //        cbkh.Text = ""; // Set to an appropriate default value if needed
+            //    }
+            //    if (row.Cells[3].Value != null)
+            //    {
+            //        cbnv.Text = row.Cells[3].Value.ToString();
+            //    }
+            //    else
+            //    {
+            //        cbnv.Text = ""; // Set to an appropriate default value if needed
+            //    }
+            //    tbsdt.Text = row.Cells[4].Value.ToString();
+            //    cbSp.Text = row.Cells[5].Value.ToString();
+            //    tbgia.Text = row.Cells[6].Value.ToString();
+            //    tbsl.Text = row.Cells[7].Value.ToString();
+
+
+            //}
+            //else
+            //{
+            //    tbMa.Text = null;
+            //    date.Text = null;
+            //    cbnv.Text = null;
+            //    cbkh.Text = null;
+            //    tbsdt.Text = null;
+            //    cbSp.SelectedItem = null;
+            //    tbgia.Text = null;
+            //    tbsl.Text = null;
+
+            //}
             int idx = e.RowIndex;
             DataGridViewRow row = dgvhd.Rows[idx];
+
             if (row.Cells[0].Value != null)
             {
-                tbMa.Text = row.Cells[0].Value.ToString();
-                tbNgay.Text = row.Cells[1].Value.ToString();
-                tbNv.Text = row.Cells[2].Value.ToString();
-                tbTenkh.Text = row.Cells[3].Value.ToString();
-                tbsdt.Text = row.Cells[4].Value.ToString();
-                cbSp.Text = row.Cells[5].Value.ToString();
-                tbgia.Text = row.Cells[6].Value.ToString();
-                tbsl.Text = row.Cells[7].Value.ToString();
-
-
+                int hoadonId = int.Parse(row.Cells[0].Value.ToString());
+                DisplaySelectedRowData(hoadonId);
             }
             else
             {
-                tbMa.Text = null;
-                tbNgay.Text = null;
-                tbNv.Text = null;
-                tbTenkh.Text = null;
-                tbsdt.Text = null;
-                cbSp.SelectedItem = null;
-                tbgia.Text = null;
-                tbsl.Text = null;
-
+                ClearInputFields(); // Clear input fields since there's no data
             }
         }
+        private void ClearInputFields()
+        {
+            tbMa.Text = null;
+            date.Text = null;
+            cbnv.Text = null;
+            cbkh.Text = null;
+            tbsdt.Text = null;
+            cbSp.SelectedItem = null;
+            tbgia.Text = null;
+            tbsl.Text = null;
+        }
+        private void DisplaySelectedRowData(int hoadonId)
+        {
+            try
+            {
+                HoaDonBEL cus = cusBAL.GetHoadonById(hoadonId);
+                if (cus != null)
+                {
+                    tbMa.Text = cus.id.ToString();
+                    date.Value = DateTime.ParseExact(cus.ngaylap, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    // Set other fields based on the properties of the 'cus' object
+                    // For example:
+                    cbkh.Text = cus.kh.tenkhach; // Assuming 'kh' is a property of type KhachHangBEL in HoaDonBEL
+                    cbnv.Text = cus.nv.tennhanvien; // Assuming 'nv' is a property of type nhanvienBEL in HoaDonBEL
+                    cbSp.Text = cus.customer.Name;
+                    tbsdt.Text = cus.sodienthoai.ToString();
+                    tbgia.Text = cus.gia.ToString();
+                    tbsl.Text = cus.soluong.ToString();
+                    // Set other fields similarly
+                }
+                else
+                {
+                    ClearInputFields(); // Clear input fields since there's no data
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Lỗi vui lòng thực hiện lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+
         private void TextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
@@ -342,34 +381,25 @@ namespace NguyenVoLinh_2121110083.GUI
         }
 
         //tạo ràng buộc tên
-        private bool ValidateNameInput(string input)
-        {
-            // Check if the input contains only letters and spaces
-            if (!string.IsNullOrEmpty(input) && input.All(c => char.IsLetter(c) || char.IsWhiteSpace(c)))
-            {
-                return true;
-            }
+    
 
-            return false;
-        }
+        //private void tbNv_Validating(object sender, CancelEventArgs e)
+        //{
+        //    if (!ValidateNameInput(tbNv.Text))
+        //    {
+        //        e.Cancel = true;
+        //        MessageBox.Show("Tên nhân viên không hợp lệ. Vui lòng nhập tên.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //    }
+        //}
 
-        private void tbNv_Validating(object sender, CancelEventArgs e)
-        {
-            if (!ValidateNameInput(tbNv.Text))
-            {
-                e.Cancel = true;
-                MessageBox.Show("Tên nhân viên không hợp lệ. Vui lòng nhập tên.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void tbTenkh_Validating(object sender, CancelEventArgs e)
-        {
-            if (!ValidateNameInput(tbTenkh.Text))
-            {
-                e.Cancel = true;
-                MessageBox.Show("Tên khách hàng không hợp lệ. Vui lòng nhập tên.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
+        //private void tbTenkh_Validating(object sender, CancelEventArgs e)
+        //{
+        //    if (!ValidateNameInput(tbTenkh.Text))
+        //    {
+        //        e.Cancel = true;
+        //        MessageBox.Show("Tên khách hàng không hợp lệ. Vui lòng nhập tên.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //    }
+        //}
 
         //ràng buộc số lượng
         private bool ValidateQuantityInput(string input)
@@ -393,24 +423,6 @@ namespace NguyenVoLinh_2121110083.GUI
 
         //ràng buộc giá
 
-        private bool ValidateNumericPrice(string input)
-        {
-            // Check if the input contains only numeric characters
-            if (!string.IsNullOrEmpty(input) && input.All(char.IsDigit))
-            {
-                return true;
-            }
-
-            return false;
-        }
-        private void tbgia_Validating(object sender, CancelEventArgs e)
-        {
-            if (!ValidateNumericPrice(tbgia.Text))
-            {
-                e.Cancel = true;
-                MessageBox.Show("Giá không hợp lệ. Vui lòng chỉ nhập số.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
 
         //mã 
         private bool IsDuplicateId(int id)
@@ -495,5 +507,105 @@ namespace NguyenVoLinh_2121110083.GUI
             }
         }
 
+        private void cbkh_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(cbkh.Text))
+            {
+                string tenkhach = cbkh.Text;
+                string sql = "SELECT sodienthoai FROM khachhang WHERE tenkhach = @tenkhach";
+
+                using (SqlConnection connection = dbConnection.CreateConnection())
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@tenkhach", tenkhach);
+
+                    try
+                    {
+                        connection.Open();
+                        object queryResult = command.ExecuteScalar();
+                        if (queryResult != null)
+                        {
+                            tbsdt.Text = queryResult.ToString();
+                        }
+                        else
+                        {
+                            tbsdt.Text = "Không tìm thấy số điện thoại.";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error: " + ex.Message);
+                    }
+                }
+            }
+            else
+            {
+                tbsdt.Text = "";
+            }
         }
+
+        private void cbnv_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+        private void ExportToPDF(DataGridView dgv)
+        {
+            
+            try
+            {
+                // Tạo tệp PDF
+                SaveFileDialog saveDialog = new SaveFileDialog();
+                saveDialog.Filter = "PDF file (*.pdf)|*.pdf";
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    Document document = new Document();
+                    PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(saveDialog.FileName, FileMode.Create));
+
+                    document.Open();
+
+                    PdfPTable pdfTable = new PdfPTable(dgv.Columns.Count);
+                    for (int j = 0; j < dgv.Columns.Count; j++)
+                    {
+                        pdfTable.AddCell(new Phrase(dgv.Columns[j].HeaderText));
+                    }
+                    pdfTable.HeaderRows = 1;
+
+                    for (int i = 0; i < dgv.Rows.Count; i++)
+                    {
+                        for (int k = 0; k < dgv.Columns.Count; k++)
+                        {
+                            if (dgv[k, i].Value != null)
+                            {
+                                pdfTable.AddCell(new Phrase(dgv[k, i].Value.ToString()));
+                            }
+                        }
+                    }
+
+                    document.Add(pdfTable);
+                    document.Close();
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Lỗi vui lòng thực hiện lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ExportToPDF(dgvhd);
+                MessageBox.Show("Xuất file PDF thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch
+            {
+                MessageBox.Show("Lỗi vui lòng thực hiện lại.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
 }

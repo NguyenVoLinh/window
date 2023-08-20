@@ -13,7 +13,7 @@ namespace NguyenVoLinh_2121110083.DAL
         public SqlConnection CreateConnection()
         {
             SqlConnection conn = new SqlConnection();
-            conn.ConnectionString = @"Data Source=.;Initial Catalog=QLBHtest1;User Id=sa; Password=sa";
+            conn.ConnectionString = @"Data Source=.;Initial Catalog=QLBHQAc#;User Id=sa; Password=sa";
             return conn;
         }
         public string GetFieldValues(string sql)

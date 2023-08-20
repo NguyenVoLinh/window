@@ -54,6 +54,7 @@ namespace NguyenVoLinh_2121110083.GUI
                     cus.sodienthoai = int.Parse(tbSdt.Text);
                     cusBAL.NewDanhmuc(cus);
                     dgvNCC.Rows.Add(cus.id, cus.name, cus.diachi, cus.sodienthoai);
+                    MessageBox.Show("Thêm thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 }
                 else
@@ -157,6 +158,7 @@ namespace NguyenVoLinh_2121110083.GUI
 
                         // Remove the customer from the DataGridView
                         dgvNCC.Rows.RemoveAt(row.Index);
+                        MessageBox.Show("Xoá thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
@@ -226,6 +228,7 @@ namespace NguyenVoLinh_2121110083.GUI
                             row.Cells[1].Value = cus.name;
                             row.Cells[2].Value = cus.diachi;
                             row.Cells[3].Value = cus.sodienthoai;
+                            MessageBox.Show("Sửa thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         else
                         {
