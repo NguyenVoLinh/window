@@ -262,6 +262,7 @@
             // 
             // btNew
             // 
+            this.btNew.BackColor = System.Drawing.Color.WhiteSmoke;
             this.btNew.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btNew.Font = new System.Drawing.Font("Times New Roman", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btNew.Image = ((System.Drawing.Image)(resources.GetObject("btNew.Image")));
@@ -272,7 +273,7 @@
             this.btNew.TabIndex = 5;
             this.btNew.Text = "Thêm";
             this.btNew.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btNew.UseVisualStyleBackColor = true;
+            this.btNew.UseVisualStyleBackColor = false;
             this.btNew.Click += new System.EventHandler(this.btNew_Click);
             // 
             // btDelete
